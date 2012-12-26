@@ -5,6 +5,7 @@ class Id110102 implements Runnable {
 
         int row = -1;
         int column = -1;
+        boolean is_row_column = true;
         int field_count = 0;
         int row_index = 0;
         String[] lines = null;
@@ -16,10 +17,12 @@ class Id110102 implements Runnable {
                 continue;
             }
 
-            if(row == -1 && column == -1) {
+            if(is_row_column) {
+            	is_row_column = false;
             	String[] splitLine = line.split("\\s+");
             	row = Integer.valueOf(splitLine[0]);
             	column = Integer.valueOf(splitLine[1]);
+            	lines = new String[row];
 
             	if(row == 0 && column == 0) {
             		break;
@@ -29,25 +32,24 @@ class Id110102 implements Runnable {
             	continue;
             }
 
-            if(lines == null) {
-            	lines = new String[row];
-            }
-
             lines[row_index] = line;
             row_index++;
 
             if(row_index == row) {
             	output += output(field_count, solve(lines));
             	row_index = 0;
-            	lines = null;
-            	row = -1;
-            	column = -1;
+            	is_row_column = true;
             }
         }
 
         System.out.println(output);
     }
 
+	/**
+	 * 문제 해결
+	 * @param lines : 입력 받은 지뢰밭
+	 * @return
+	 */
 	private String[] solve(String[] lines) {
 		int rows = lines.length;
 		String[] result = new String[rows];
@@ -57,35 +59,12 @@ class Id110102 implements Runnable {
 		for(int i=0; i<rows; i++) {
 			String line = lines[i];
 			int columns = line.length();
-			int number = 0;
 
 			for(int j=0; j<columns; j++) {
 				if(line.charAt(j) == '*') {
 					result[i] += "*";
 				} else {
-					for(int _i = i - 1; _i <= i + 1; _i++) {
-						if(_i < 0 || _i > rows - 1) {
-							continue;
-						}
-
-						String _rows = lines[_i];
-						for(int _j = j - 1; _j <= j + 1; _j++) {
-							if(_j < 0 || _j > columns - 1) {
-								continue;
-							}
-
-							if(_i == i && _j == j) {
-								continue;
-							}
-
-							if(_rows.charAt(_j) == '*') {
-								number++;
-							}
-						}
-					}
-
-					result[i] += Integer.toString(number);
-					number = 0;
+					result[i] += check_count(rows, columns, i, j, lines);
 				}
 			}
 		}
@@ -93,10 +72,46 @@ class Id110102 implements Runnable {
 		return result;
 	}
 
+	/**
+	 * 인접해 있는 위치에 지뢰가 있는지 체크
+	 * @param rows : 총 row 수
+	 * @param columns : 총 column 수
+	 * @param row : 현재 row
+	 * @param column : 현재 column
+	 * @param lines : 지뢰밭
+	 * @return
+	 */
+	private String check_count(int rows, int columns, int row, int column, String[] lines) {
+		int number = 0;
+		for(int i = row - 1; i <= row + 1; i++) {
+			if(i < 0 || i > rows - 1) {
+				continue;
+			}
+
+			for(int j = column - 1; j <= column + 1; j++) {
+				if(j < 0 || j > columns - 1 || (i == row && j == column)) {
+					continue;
+				}
+
+				if(lines[i].charAt(j) == '*') {
+					number++;
+				}
+			}
+		}
+
+		return Integer.toString(number);
+	}
+
+	/**
+	 * 출력 내용
+	 * @param field_count : 지뢰밭 No
+	 * @param result
+	 * @return
+	 */
 	private String output(int field_count, String[] result) {
-		String output = "\nField #" + field_count + ":\n";
+		String output = (field_count > 1 ? "\n\n" : "") + "Field #" + field_count + ":";
 		for(int i=0; i<result.length; i++) {
-			output += result[i] + "\n";
+			output += "\n" + result[i];
 		}
 
 		return output;
