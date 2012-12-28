@@ -1,3 +1,4 @@
+package programming_challenges;
 class Id110102 implements Runnable {
 	public void run() {
         int maxLength = 1024;

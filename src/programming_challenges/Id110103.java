@@ -1,3 +1,4 @@
+package programming_challenges;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.text.DecimalFormat;

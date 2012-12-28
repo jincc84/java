@@ -1,11 +1,13 @@
+package programming_challenges;
 /*
  * Main.java
  *  java program model for www.programming-challenges.com
  */
 
 import java.io.*;
+import java.util.*;
 
-class Main implements Runnable{
+class Sample implements Runnable{
     static String ReadLn(int maxLength){  // utility function to read from stdin,
                                           // Provided by Programming-challenges, edit for style only
         byte line[] = new byte [maxLength];
@@ -27,13 +29,29 @@ class Main implements Runnable{
 
     public static void main(String args[])  // entry point from OS
     {
-        Main myWork = new Main();  // Construct the bootloader
+        Sample myWork = new Sample();  // Construct the bootloader
         myWork.run();            // execute
     }
 
     public void run() {
-//        new Id110101().run();
-//        new Id110102().run();
-        new Id110103().run();
+        new mySample().run();
+    }
+}
+class mySample implements Runnable{
+	public void run() {
+        int maxLength = 1024;
+        String line;
+        while ((line = Sample.ReadLn(maxLength)) != null) {
+            line = line.trim();
+            if (line.isEmpty()) {
+                continue;
+            }
+
+            String[] splitLine = line.split("\\s+");
+//            int number1 = Integer.valueOf(splitLine[0]);
+//            int number2 = Integer.valueOf(splitLine[1]);
+//            int maxCycleLength = solve(number1, number2);
+//            System.out.println(number1 + " " + number2 + " " + maxCycleLength);
+        }
     }
 }
