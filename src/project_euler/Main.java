@@ -1,6 +1,9 @@
 package project_euler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 public class Main {
 	private static void problem1() {
@@ -453,8 +456,82 @@ public class Main {
 		output(13, sum.substring(0, 10));
 	}
 	
+	private static void problem14() {
+		int max_terms_no = 0;
+		int max_terms = 0;
+		int terms = 0;
+		long cal_no = 0;
+		int no = 0;
+		int MAX_NUMBER = 1000000;
+		
+		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+		for(int i=1; i<=MAX_NUMBER; i++) {
+			if(map.containsKey(i)) {
+//				System.out.println("[continue] no:" + i + ", terms:" + map.get(i) + ", max_terms:" + max_terms_no);
+				continue;
+			}
+			
+			cal_no = i;
+			no = i;
+			terms = 1;
+			while(cal_no != 1) {
+				if(cal_no % 2 == 0) {
+					cal_no /= 2;
+				} else {
+					cal_no = 3 * cal_no + 1;
+				}
+				
+				terms++;
+			}
+			
+			map.put(no, terms);
+//			System.out.println("no:" + no + ", terms:" + terms + ", max_terms:" + max_terms_no);
+			while(no <= MAX_NUMBER) {
+				no *= 2;
+				terms++;
+				if(!map.containsKey(no)) {
+					if(no <= MAX_NUMBER) {
+						map.put(no, terms);
+					} else {
+						no /= 2;
+						terms--;
+						break;
+					}
+				}
+			}
+			
+			if(max_terms < terms) {
+				max_terms = terms;
+				max_terms_no = no;
+			}
+		}
+		
+		output(14, max_terms_no);
+	}
+	
+	private static void problem15() {
+		long[][] matrix = new long[21][21];
+		// initialize
+		for(int i=0; i<=20; i++) {
+			matrix[i][0] = 1;
+			matrix[0][i] = 1;
+		}
+		
+		for(int i=1; i<=20; i++) {
+			for(int j=1; j<=20; j++) {
+				matrix[i][j] = matrix[i-1][j] + matrix[i][j-1];
+			}
+		}
+
+		output(15, matrix[20][20]);
+	}
+	
+	private static void problem16() {
+		
+	}
+	
 	public static void main(String[] args) {
-		problem13();
+		problem16();
 	}
 
 	private static void output(int index, int result) {
