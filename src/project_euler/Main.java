@@ -532,43 +532,141 @@ public class Main {
 		String[] result = new String[1024];
 		result[0] = "1";
 		int max_digits = 0;
-		int stat_no = 1024;
-		int temp_digit = 0;
-		int temp = 0;
+		int stat_no = 1024; // 2^10
+		int index = 0;
+		int unit_result = 0;
 		int remain = 0;
 		int output = 0;
 
-		for(int time = 0; time < 100; time++) {
+		for(int time = 0; time < 100; time++) { // total 2^10*100 = 2^1000
 			for(int j=0; j<max_digits + 1; j++) {
 				result[j] = Integer.toString(Integer.parseInt(result[j]) * stat_no);
 			}
 
-			while(result[temp_digit] != null) {
-				temp = Integer.parseInt(result[temp_digit]) + remain;
-				remain = (temp - (temp % 10)) / 10;
-				result[temp_digit] = Integer.toString(temp % 10);
-				temp_digit++;
+			while(result[index] != null) {
+				unit_result = Integer.parseInt(result[index]) + remain;
+				remain = (unit_result - (unit_result % 10)) / 10;
+				result[index] = Integer.toString(unit_result % 10);
+				index++;
 
-				if(result[temp_digit] == null && remain > 0) {
-					result[temp_digit] = Integer.toString(remain);
+				if(result[index] == null && remain > 0) {
+					result[index] = Integer.toString(remain);
 					remain = 0;
 				}
 			}
 
-			max_digits = temp_digit - 1;
-			temp_digit = 0;
+			max_digits = index - 1;
+			index = 0;
 		}
 
-		while(result[temp_digit] != null) {
-			output += Integer.parseInt(result[temp_digit]);
-			temp_digit++;
+		while(result[index] != null) {
+			output += Integer.parseInt(result[index]);
+			index++;
 		}
 
 		output(16, output);
 	}
 
+	private static void problem17() {
+		HashMap<Integer, String> typical_word = new HashMap<Integer, String>();
+		typical_word.put(1, "one");
+		typical_word.put(2, "two");
+		typical_word.put(3, "three");
+		typical_word.put(4, "four");
+		typical_word.put(5, "five");
+		typical_word.put(6, "six");
+		typical_word.put(7, "seven");
+		typical_word.put(8, "eight");
+		typical_word.put(9, "nine");
+		typical_word.put(10, "ten");
+		typical_word.put(11, "eleven");
+		typical_word.put(12, "twelve");
+		typical_word.put(13, "thirteen");
+		typical_word.put(14, "fourteen");
+		typical_word.put(15, "fifteen");
+		typical_word.put(16, "sixteen");
+		typical_word.put(17, "seventeen");
+		typical_word.put(18, "eighteen");
+		typical_word.put(19, "nineteen");
+		typical_word.put(20, "twenty");
+		typical_word.put(30, "thirty");
+		typical_word.put(40, "forty");
+		typical_word.put(50, "fifty");
+		typical_word.put(60, "sixty");
+		typical_word.put(70, "seventy");
+		typical_word.put(80, "eighty");
+		typical_word.put(90, "ninety");
+		typical_word.put(100, "hundred");
+		typical_word.put(1000, "thousand");
+		
+		int result = 0;
+		int no = 0;
+		String number_word = "";
+		for(int i=1; i<=1000; i++) {
+			no = i;
+			number_word = "";
+			
+			if(no == 1000) {
+				result += typical_word.get(1).length() +  typical_word.get(1000).length();
+//				System.out.println("1000 = " + typical_word.get(1) + typical_word.get(1000));
+				continue;
+			}
+			
+			if(no >= 100) {
+				result += typical_word.get((no - (no % 100)) / 100).length();
+				number_word += typical_word.get((no - (no % 100)) / 100);
+				result += typical_word.get(100).length();
+				number_word += typical_word.get(100);
+				if(no % 100 != 0) {
+					result += 3; // and -> 3 more : British usage
+					number_word += "and";
+				}
+				no = no % 100;
+			}
+			
+			if(no >= 10) {
+				if(typical_word.containsKey(no)) {
+					result += typical_word.get(no).length();
+					number_word += typical_word.get(no);
+//					System.out.println(i + " = " + number_word);
+					continue;
+				}
+				
+				result += typical_word.get(no - (no % 10)).length();
+				number_word += typical_word.get(no - (no % 10));
+				no = no % 10;
+			}
+			
+			if(no > 0) {
+				result += typical_word.get(no).length();
+				number_word += typical_word.get(no);
+			}
+			
+//			System.out.println(i + " = " + number_word);
+		}
+		
+		output(17, result);
+	}
+
+	private static void problem18() {
+		int HEIGHT = 15;
+		String source = "75 95 64 17 47 82 18 35 87 10 20 04 82 47 65 19 01 23 75 03 34 88 02 77 73 07 63 67 99 65 04 28 06 16 70 92 41 41 26 56 83 40 80 70 33 41 48 72 33 47 32 37 16 94 29 53 71 44 65 25 43 91 52 97 51 14 70 11 33 28 77 73 17 78 39 68 17 57 91 71 52 38 17 14 91 43 58 50 27 29 48 63 66 04 68 89 53 67 30 73 16 69 87 40 31 04 62 98 27 23 09 70 98 73 93 38 53 60 04 23";
+		int[] row_start = new int[HEIGHT];
+		String[] numbers = source.split(" ");
+		int total_number_count = 0;
+		int result = 0;
+		int choice = 0;
+		
+		for(int i=1; i<=HEIGHT; i++) {
+			total_number_count += i;
+			row_start[i-1] = total_number_count;
+		}
+		
+		output(18, result);
+	}
+	
 	public static void main(String[] args) {
-		problem16();
+		problem18();
 	}
 
 	private static void output(int index, int result) {
