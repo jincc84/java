@@ -304,12 +304,12 @@ public class Main {
 		int sequence = 0;
 		int triangle_number = 0;
 		int divisor = 0;
-		
+
 		while(divisor < 500) {
 			divisor = 0;
 			sequence++;
 			triangle_number += sequence;
-			
+
 			for(int i=1; i<triangle_number; i++) {
 				if(i * 2 > triangle_number) {
 					break;
@@ -318,14 +318,14 @@ public class Main {
 					divisor++;
 				}
 			}
-			
+
 			System.out.println("sequence:" + sequence + ", triangle_number:" + triangle_number + ", divisor:" + divisor);
 		}
-		
+
 		output(12, triangle_number);
-		
+
 	}
-	
+
 	private static void problem13() {
 		int TOTAL_DIGIT = 100;
 		int DIGIT_LENGTH = 50;
@@ -429,12 +429,12 @@ public class Main {
 							"72107838435069186155435662884062257473692284509516" +
 							"20849603980134001723930671666823555245252804609722" +
 							"53503534226472524250874054075591789781264330331690";
-		
+
 		ArrayList<String> rows = new ArrayList<String>();
 		for(int i=0; i<TOTAL_DIGIT; i++) {
 			rows.add(digit.substring(i * DIGIT_LENGTH, (i + 1) * DIGIT_LENGTH));
 		}
-		
+
 		String sum = "";
 		int cal = 0;
 		int part_sum = 0;
@@ -443,19 +443,19 @@ public class Main {
 			for(int j=0; j<TOTAL_DIGIT; j++) {
 				part_sum += Integer.parseInt(rows.get(j).substring(i, i+1));
 			}
-			
+
 			cal += part_sum;
 			sum = (cal % 10) + sum;
-//			
+//
 //			System.out.println("part_sum = " + part_sum + ", cal = " + cal + ", sum = " + sum);
 			cal = (cal - (cal % 10)) / 10;
 		}
-		
+
 		sum = cal + sum;
-		
+
 		output(13, sum.substring(0, 10));
 	}
-	
+
 	private static void problem14() {
 		int max_terms_no = 0;
 		int max_terms = 0;
@@ -463,14 +463,14 @@ public class Main {
 		long cal_no = 0;
 		int no = 0;
 		int MAX_NUMBER = 1000000;
-		
+
 		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
 		for(int i=1; i<=MAX_NUMBER; i++) {
 			if(map.containsKey(i)) {
 //				System.out.println("[continue] no:" + i + ", terms:" + map.get(i) + ", max_terms:" + max_terms_no);
 				continue;
 			}
-			
+
 			cal_no = i;
 			no = i;
 			terms = 1;
@@ -480,10 +480,10 @@ public class Main {
 				} else {
 					cal_no = 3 * cal_no + 1;
 				}
-				
+
 				terms++;
 			}
-			
+
 			map.put(no, terms);
 //			System.out.println("no:" + no + ", terms:" + terms + ", max_terms:" + max_terms_no);
 			while(no <= MAX_NUMBER) {
@@ -499,39 +499,41 @@ public class Main {
 					}
 				}
 			}
-			
+
 			if(max_terms < terms) {
 				max_terms = terms;
 				max_terms_no = no;
 			}
 		}
-		
+
 		output(14, max_terms_no);
 	}
-	
+
 	private static void problem15() {
 		long[][] matrix = new long[21][21];
-		// initialize
 		for(int i=0; i<=20; i++) {
-			matrix[i][0] = 1;
-			matrix[0][i] = 1;
-		}
-		
-		for(int i=1; i<=20; i++) {
-			for(int j=1; j<=20; j++) {
-				matrix[i][j] = matrix[i-1][j] + matrix[i][j-1];
+			for(int j=0; j<=20; j++) {
+				if(i - 1 < 0 || j - 1 < 0) {
+					matrix[i][j] = 1;
+				} else {
+					matrix[i][j] = matrix[i-1][j] + matrix[i][j-1];
+				}
+
+//				if(i == j) {
+//					System.out.println("matrix[" + i + "][" + i + "] value : " + matrix[i][i]);
+//				}
 			}
 		}
 
 		output(15, matrix[20][20]);
 	}
-	
+
 	private static void problem16() {
-		
+
 	}
-	
+
 	public static void main(String[] args) {
-		problem16();
+		problem15();
 	}
 
 	private static void output(int index, int result) {
