@@ -529,11 +529,46 @@ public class Main {
 	}
 
 	private static void problem16() {
+		String[] result = new String[1024];
+		result[0] = "1";
+		int max_digits = 0;
+		int stat_no = 1024;
+		int temp_digit = 0;
+		int temp = 0;
+		int remain = 0;
+		int output = 0;
 
+		for(int time = 0; time < 100; time++) {
+			for(int j=0; j<max_digits + 1; j++) {
+				result[j] = Integer.toString(Integer.parseInt(result[j]) * stat_no);
+			}
+
+			while(result[temp_digit] != null) {
+				temp = Integer.parseInt(result[temp_digit]) + remain;
+				remain = (temp - (temp % 10)) / 10;
+				result[temp_digit] = Integer.toString(temp % 10);
+				temp_digit++;
+
+				if(result[temp_digit] == null && remain > 0) {
+					result[temp_digit] = Integer.toString(remain);
+					remain = 0;
+				}
+			}
+
+			max_digits = temp_digit - 1;
+			temp_digit = 0;
+		}
+
+		while(result[temp_digit] != null) {
+			output += Integer.parseInt(result[temp_digit]);
+			temp_digit++;
+		}
+
+		output(16, output);
 	}
 
 	public static void main(String[] args) {
-		problem15();
+		problem16();
 	}
 
 	private static void output(int index, int result) {
