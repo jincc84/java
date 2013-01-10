@@ -528,6 +528,7 @@ public class Main {
 		output(15, matrix[20][20]);
 	}
 
+	// similar problem20
 	private static void problem16() {
 		String[] result = new String[1024];
 		result[0] = "1";
@@ -721,6 +722,48 @@ public class Main {
 		output(19, result);
 	}
 	
+	// similar problem16
+	private static void problem20() {
+		String[] result = new String[1024];
+		result[0] = "1";
+		int max_digits = 0;
+		int index = 0;
+		int unit_result = 0;
+		int remain = 0;
+		int output = 0;
+
+		for(int no = 100; no > 1; no--) {
+			for(int j=0; j<max_digits + 1; j++) {
+				result[j] = Integer.toString(Integer.parseInt(result[j]) * no);
+			}
+
+			while(result[index] != null) {
+				unit_result = Integer.parseInt(result[index]) + remain;
+				remain = (unit_result - (unit_result % 10)) / 10;
+				result[index] = Integer.toString(unit_result % 10);
+				index++;
+
+				if(result[index] == null && remain > 0) {
+					result[index] = Integer.toString(remain);
+					remain = 0;
+				}
+			}
+
+			max_digits = index - 1;
+			index = 0;
+		}
+
+		while(result[index] != null) {
+			output += Integer.parseInt(result[index]);
+			index++;
+		}
+
+		output(20, output);
+	}
+	
+	private static void problem21() {
+		
+	}
 	
 	
 	private static void problem67() {
@@ -765,7 +808,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		problem19();
+		problem21();
 	}
 
 	private static void output(int index, int result) {
